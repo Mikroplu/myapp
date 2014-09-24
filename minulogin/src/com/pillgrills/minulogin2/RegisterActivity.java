@@ -79,6 +79,7 @@ public class RegisterActivity extends ActionBarActivity {
 		Log.d("PASSWORDS", "_" + password_again + "_");
 
 		if (checkIfValidForRegistration(username, password, password_again)) {
+			new SendData().execute("");
 			// TODO
 
 		}
@@ -92,7 +93,7 @@ public class RegisterActivity extends ActionBarActivity {
 			if (password.length() > 6) {
 				if (password.equals(password_again)) {
 					Toast.makeText(getApplicationContext(),
-							"Successfully registered!", 2).show();
+							"Fields are ok, trying to add user to database...", 2).show();
 					return true;
 				} else {
 					Toast.makeText(getApplicationContext(),
@@ -112,8 +113,8 @@ public class RegisterActivity extends ActionBarActivity {
 	}
 
 	private class SendData extends AsyncTask<String, Void, String> {
-		String name = "Jaanus";
-		String pass = "12345";
+		String name = null;
+		String pass=null;
 		HttpPost httppost;
 		HttpResponse response;
 		HttpClient httpclient;
@@ -124,13 +125,16 @@ public class RegisterActivity extends ActionBarActivity {
 		@Override
 		protected String doInBackground(String... params) {
 			try {
+				name = username_field.getText().toString();
+				pass = password_field.getText().toString();
+				
 				httpclient = new DefaultHttpClient();
 				httppost = new HttpPost("http://mikroplu.co.nf/Register.php");
 				// Add your data
 				nameValuePairs = new ArrayList<NameValuePair>(2);
 				nameValuePairs.add(new BasicNameValuePair("username", name
 						.trim()));
-				nameValuePairs.add(new BasicNameValuePair("username", name
+				nameValuePairs.add(new BasicNameValuePair("password", pass
 						.trim()));
 				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
@@ -147,7 +151,7 @@ public class RegisterActivity extends ActionBarActivity {
 
 		@Override
 		protected void onPostExecute(String result) {
-			// Log.d("DATABASE",returnString);
+			Log.d("DATABASE",returnString);
 			Toast.makeText(getApplicationContext(), returnString, 4).show();
 
 		}

@@ -45,7 +45,7 @@ public class MainActivity extends ActionBarActivity {
 
 		username_field = (EditText) findViewById(R.id.username);
 		password_field = (EditText) findViewById(R.id.password);
-		new GetData().execute("");
+		
 	}
 
 	@Override
@@ -77,16 +77,18 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 	public void sendToApplicationActivity(View view) {
+		
+		
 		new GetData().execute("");
 		
 		
 		
 		
 		
-		Intent intent = new Intent(this, ApplicationActivity.class);
+	/*	Intent intent = new Intent(this, ApplicationActivity.class);
 		intent.putExtra("USER_NAME", username_field.getText().toString());
 		startActivity(intent);
-		finish();
+		finish();*/
 
 	}
 
@@ -108,7 +110,8 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 	private class GetData extends AsyncTask<String, Void, String> {
-		String name = "Jaanus";
+		String name = null;
+		String pass = null;
 		HttpPost httppost;
 		HttpResponse response;
 		HttpClient httpclient;
@@ -119,11 +122,15 @@ public class MainActivity extends ActionBarActivity {
 		@Override
 		protected String doInBackground(String... params) {
 			try {
+				name = username_field.getText().toString();
+				pass = password_field.getText().toString();
 				httpclient = new DefaultHttpClient();
 				httppost = new HttpPost("http://mikroplu.co.nf/Login.php");
 				// Add your data
-				nameValuePairs = new ArrayList<NameValuePair>(1);
+				nameValuePairs = new ArrayList<NameValuePair>(2);
 				nameValuePairs.add(new BasicNameValuePair("username", name
+						.trim()));
+				nameValuePairs.add(new BasicNameValuePair("password", pass
 						.trim()));
 				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
@@ -140,7 +147,7 @@ public class MainActivity extends ActionBarActivity {
 
 		@Override
 		protected void onPostExecute(String result) {
-			//Log.d("DATABASE",returnString);
+			Log.d("DATABASE",returnString);
 			Toast.makeText(getApplicationContext(), returnString, 4).show();
 
 		}
