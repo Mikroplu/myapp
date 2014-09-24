@@ -33,6 +33,7 @@ public class RegisterActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.register_screen);
+		Toast.makeText(getApplicationContext(), "THIS PASSWORD IS NOT PRIVATE!!! USE ONLY FOR TESTING", 1).show();
 
 		username_field = (EditText) findViewById(R.id.username);
 		password_field = (EditText) findViewById(R.id.password);

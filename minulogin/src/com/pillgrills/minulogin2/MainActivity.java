@@ -37,7 +37,9 @@ public class MainActivity extends ActionBarActivity {
 	HttpClient httpclient;
 	List<NameValuePair> nameValuePairs;
 	InputStream inputStream;
+	String returnString = null;
 	private boolean loggedin;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -45,7 +47,7 @@ public class MainActivity extends ActionBarActivity {
 
 		username_field = (EditText) findViewById(R.id.username);
 		password_field = (EditText) findViewById(R.id.password);
-		
+
 	}
 
 	@Override
@@ -77,18 +79,8 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 	public void sendToApplicationActivity(View view) {
-		
-		
+
 		new GetData().execute("");
-		
-		
-		
-		
-		
-	/*	Intent intent = new Intent(this, ApplicationActivity.class);
-		intent.putExtra("USER_NAME", username_field.getText().toString());
-		startActivity(intent);
-		finish();*/
 
 	}
 
@@ -117,7 +109,6 @@ public class MainActivity extends ActionBarActivity {
 		HttpClient httpclient;
 		List<NameValuePair> nameValuePairs;
 		InputStream inputStream;
-		String returnString;
 
 		@Override
 		protected String doInBackground(String... params) {
@@ -147,9 +138,20 @@ public class MainActivity extends ActionBarActivity {
 
 		@Override
 		protected void onPostExecute(String result) {
-			Log.d("DATABASE",returnString);
-			Toast.makeText(getApplicationContext(), returnString, 4).show();
-
+			Log.d("DATABASE", returnString);
+			if (returnString.equals("OK")) {
+				Intent intent = new Intent(getApplicationContext(), ApplicationActivity.class);
+				intent.putExtra("USER_NAME", username_field.getText()
+						.toString());
+				startActivity(intent);
+				finish();
+			} else if (returnString.equals("NO")) {
+				Toast.makeText(getApplicationContext(), "User does not exist",
+						2).show();
+				returnString = null;
+			} else {
+				Toast.makeText(getApplicationContext(), returnString, 3).show();
+			}
 		}
 
 		String convertStreamToString(java.io.InputStream is) {
